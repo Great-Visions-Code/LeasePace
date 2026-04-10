@@ -6,16 +6,22 @@
 //
 
 import Foundation
-
-// Struct for Lease Details
-struct Lease {
-    var startDate: Date
+    /// Stores the user-entered lease details needed for mileage pacing
+    /// and end-of-lease overage forecasting.
+    struct Lease {
     
-    var termMonths: Int
+        /// The date the lease began.
+        var startDate: Date
     
-    var milesAllowedPerYear: Int
+        /// Lease length in months.
+        var termMonths: Int
     
-    var costPerMile: Double
+        /// Annual mileage allowance for the lease.
+        var milesAllowedPerYear: Int
     
-    var currentMileage: Double
+        /// Overage cost charged per mile above the lease allowance.
+        var costPerMile: Double
+    
+        /// Current odometer reading for the leased vehicle.
+        var currentMileage: Int
 }
