@@ -153,9 +153,9 @@ final class DashboardViewModel: ObservableObject {
     /// Summary text describing the projected end-of-lease mileage outcome.
     var projectedMileageSummaryText: String {
         if projectedOverageMiles > 0 {
-            return "You're projected to drive \(projectedOverageMiles.formattedOneDecimal) more miles than allowed by the end of this lease."
+            return "You're projected to drive \(projectedOverageMiles.formattedTwoDecimal) more miles than allowed by the end of this lease."
         } else {
-            return "You're projected to drive \(projectedUnderMiles.formattedOneDecimal) fewer miles than allowed by the end of this lease."
+            return "You're projected to drive \(projectedUnderMiles.formattedTwoDecimal) fewer miles than allowed by the end of this lease."
         }
     }
         
