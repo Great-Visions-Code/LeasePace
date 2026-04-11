@@ -9,9 +9,9 @@ import Foundation
 //  MARK: - Double Formatting
 extension Double {
     /// Example: 33.8
-    var formattedOneDecimal: String {
+    var formattedTwoDecimal: String {
         self.formatted(
-            .number.precision(.fractionLength(0...1))
+            .number.precision(.fractionLength(0...2))
         )
     }
     
