@@ -11,13 +11,7 @@ import SwiftUI
 struct LeasePaceApp: App {
     var body: some Scene {
         WindowGroup {
-            GarageView(
-                vehicle: Vehicle(
-                    year: 2026,
-                    make: "Mercedes",
-                    model: "C300"
-                )
-            )
+            GarageView()
         }
     }
 }
