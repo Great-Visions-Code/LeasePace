@@ -8,34 +8,51 @@
 import SwiftUI
 
 struct LeaseDetailsInputView: View {
-    
+        
+    // MARK: - Properties
+        
     let vehicle: Vehicle
-    
+        
     @State private var startDate = Date()
     @State private var termMonths = 36
     @State private var milesAllowedPerYear = ""
     @State private var costPerMile = ""
     @State private var currentMileage = ""
     
+    // MARK: - Body
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                    
+                // MARK: - Vehicle Display
                 
                 VStack(alignment: .leading, spacing: 4) {
                     
                     Text(vehicle.displayName)
+                        .font(.headline)
                         .foregroundStyle(.secondary)
                 }
                 
+                // MARK: - Lease Start Date
+                
                 VStack(alignment: .leading, spacing: 8) {
+                    
                     Text("Lease Start Date")
                         .bold()
                     
-                    DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
-                        .labelsHidden()
+                    DatePicker(
+                        "Start Date",
+                        selection: $startDate,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
                 }
                 
+                // MARK: - Lease Term
+                
                 VStack(alignment: .leading, spacing: 8) {
+                    
                     Text("Lease Term")
                         .bold()
                     
@@ -48,32 +65,43 @@ struct LeaseDetailsInputView: View {
                     .pickerStyle(.menu)
                 }
                 
+                // MARK: - Miles Allowed Per Year
+                
                 VStack(alignment: .leading, spacing: 8) {
+                    
                     Text("Miles Allowed Per Year")
                         .bold()
                     
-                    TextField("0000..", text: $milesAllowedPerYear)
+                    TextField("12000", text: $milesAllowedPerYear)
                         .keyboardType(.numberPad)
                         .textFieldStyle(.roundedBorder)
                 }
                 
+                // MARK: - Cost Per Mile
+                
                 VStack(alignment: .leading, spacing: 8) {
+                    
                     Text("Cost Per Mile")
                         .bold()
                     
-                    TextField("0.00", text: $costPerMile)
+                    TextField("0.25", text: $costPerMile)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.roundedBorder)
                 }
+                    
+                // MARK: - Current Mileage
                 
                 VStack(alignment: .leading, spacing: 8) {
+                    
                     Text("Current Mileage")
                         .bold()
                     
-                    TextField("1234.5", text: $currentMileage)
+                    TextField("10000", text: $currentMileage)
                         .keyboardType(.numberPad)
                         .textFieldStyle(.roundedBorder)
                 }
+                
+                // MARK: - Continue Navigation
                 
                 NavigationLink {
                     DashboardView(
@@ -87,7 +115,9 @@ struct LeaseDetailsInputView: View {
                         )
                     )
                 } label: {
+                    
                     Text("Continue")
+                        .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .foregroundColor(.white)
@@ -104,6 +134,8 @@ struct LeaseDetailsInputView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     NavigationStack {
