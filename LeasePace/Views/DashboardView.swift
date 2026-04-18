@@ -17,10 +17,10 @@ struct DashboardView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(spacing: 20) {
                 
                 // Header
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(spacing: 8) {
                     Text(vehicle.displayName)
                         .font(.title2)
                         .bold()
@@ -29,69 +29,90 @@ struct DashboardView: View {
                         .font(.headline)
                 }
                 
-                // Current Position
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Current Position")
-                        .font(.headline)
-                    
-                    Text("Total Miles Allowed: \(dashboardVM.totalMilesAllowed)")
-                        .bold()
-                    Text("Projected Miles at End: \(dashboardVM.projectedMilesAtEndOfLease.formattedTwoDecimal)")
-                        .bold()
-                    Text("Allowed Miles To Date: \(dashboardVM.expectedMileageByToday.formattedTwoDecimal)")
-                        .bold()
-                    Text("Current Mileage: \(lease.currentMileage)")
-                        .bold()
-                    Text("Difference To Date: \(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) miles")
-                        .bold()
-                    Text(dashboardVM.differenceInMilesAllowedToDate >= 0 ? "Under Allowance To Date" : "Over Allowance To Date")
-                        .bold()
-                }
-                
                 // End of Lease Forecast
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("End of Lease Forecast")
-                        .font(.headline)
-                    
-                    Text("Projected Overage Cost: \(dashboardVM.projectedOverageCost.formattedCurrency)")
-                        .bold()
-                    Text(dashboardVM.projectedMileageSummaryText)
-                        .bold()
+                DashboardCardView(title: "End of Lease Forecast") {
+                    VStack(spacing: 8) {
+                        Text("Total Miles Allowed: \(dashboardVM.totalMilesAllowed)")
+                        
+                        Divider()
+                        
+                        Text("Projected Miles at End: \(dashboardVM.projectedMilesAtEndOfLease.formattedTwoDecimal)")
+                        
+                        Divider()
+
+                        Text("Projected Overage Cost: \(dashboardVM.projectedOverageCost.formattedCurrency)")
+                            .bold()
+                        
+                        Divider()
+
+                        Text(dashboardVM.projectedMileageSummaryText)
+                            .bold()
+                    }
+                    .frame(maxWidth: .infinity)
                 }
                 
-                // Daily Pace
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Daily Mileage Pace")
-                        .font(.headline)
-                    
-                    Text("Allowed: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal) mi/day")
-                        .bold()
-                    Text("Current: \(dashboardVM.currentMilesPerDay.formattedTwoDecimal) mi/day")
-                        .bold()
+                DashboardCardView(title: "Daily Mileage Pace") {
+                    VStack(spacing: 8) {
+                        Text("Allowed: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal)")
+                        
+                        Divider()
+                        
+                        Text("Current: \(dashboardVM.currentMilesPerDay.formattedTwoDecimal)")
+                    }
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
                 }
                 
-                // Lease Timeline
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Lease Timeline")
-                        .font(.headline)
-                    
-                    Text("End Date: \(dashboardVM.leaseEndDate.formattedDateShortString)")
-                        .bold()
-                    Text("Total Lease Days: \(dashboardVM.totalLeaseDays)")
-                        .bold()
-                    Text("Days Elapsed: \(dashboardVM.daysElapsed)")
-                        .bold()
-                    Text("Days Remaining: \(dashboardVM.daysRemaining)")
-                        .bold()
+                DashboardCardView(title: "Monthly Mileage Pace") {
+                    VStack(spacing: 8) {
+                        Text("Allowed: \(dashboardVM.allowedMilesPerMonth.formattedTwoDecimal)")
+                        
+                        Divider()
+                        
+                        Text("Current: \(dashboardVM.currentMilesPerMonth.formattedTwoDecimal)")
+                    }
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
                 }
                 
-                // Lease Progress
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Lease Progress")
-                        .font(.headline)
-                    
-                    Text("\(dashboardVM.leaseProgressPercentage)%")
-                        .bold()
+                DashboardCardView(title: "Mileage to Date") {
+                    VStack(spacing: 8) {
+                        Text("\(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) miles \(dashboardVM.differenceInMilesAllowedToDate >= 0 ? "Under Pace to date" : "Over Pace to date"  )")
+                        
+                        Divider()
+                        
+                        Text("\(dashboardVM.expectedMileageByToday.formattedWholeNumber) allowed to date")
+
+                        Divider()
+                        
+                        Text("\(lease.currentMileage.formattedWithCommas) current mileage")
+                    }
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                }
+                
+                // Lease Progress Timeline
+                DashboardCardView(title: "Lease Progress") {
+                    VStack(spacing: 8) {
+                        Text("\(dashboardVM.leaseProgressPercentage)% Complete")
+                        
+                        Divider()
+                        
+                        Text("\(dashboardVM.daysElapsed) days elapsed")
+                        
+                        Divider()
+                        
+                        Text("\(dashboardVM.daysRemaining) days remaining")
+                        
+                        Divider()
+                        
+                        Text("Starts \(lease.startDate.formattedDateShortString)")
+                        
+                        Divider()
+                        
+                        Text("Ends \(dashboardVM.leaseEndDate.formattedDateShortString)")
+                    }
+                    .foregroundStyle(.secondary)
                 }
             }
             .padding()
