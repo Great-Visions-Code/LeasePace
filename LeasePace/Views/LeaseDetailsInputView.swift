@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct LeaseDetailsInputView: View {
-        
     // MARK: - Properties
         
     let vehicle: Vehicle
@@ -28,7 +27,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Vehicle Display
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    
                     Text(vehicle.displayName)
                         .font(.headline)
                         .foregroundStyle(.secondary)
@@ -37,7 +35,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Lease Start Date
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("Lease Start Date")
                         .bold()
                     
@@ -52,7 +49,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Lease Term
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("Lease Term")
                         .bold()
                     
@@ -68,7 +64,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Miles Allowed Per Year
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("Miles Allowed Per Year")
                         .bold()
                     
@@ -80,7 +75,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Cost Per Mile
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("Cost Per Mile")
                         .bold()
                     
@@ -92,7 +86,6 @@ struct LeaseDetailsInputView: View {
                 // MARK: - Current Mileage
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    
                     Text("Current Mileage")
                         .bold()
                     
@@ -115,7 +108,6 @@ struct LeaseDetailsInputView: View {
                         )
                     )
                 } label: {
-                    
                     Text("Continue")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
