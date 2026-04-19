@@ -18,10 +18,8 @@ import Combine
 /// - Overage and under-mile forecasting
 /// - Dashboard-friendly status text
 final class DashboardViewModel: ObservableObject {
-        
     let vehicle: Vehicle
     let lease: Lease
-        
     init(vehicle: Vehicle, lease: Lease) {
         self.vehicle = vehicle
         self.lease = lease
@@ -61,7 +59,6 @@ final class DashboardViewModel: ObservableObject {
             from: lease.startDate,
             to: leaseEndDate
         ).day ?? 0
-            
         return max(days, 1)
     }
         
@@ -72,13 +69,11 @@ final class DashboardViewModel: ObservableObject {
     /// - totalLeaseDays if the lease has already ended
     var daysElapsed: Int {
         let today = Date()
-            
         let days = Calendar.current.dateComponents(
             [.day],
             from: lease.startDate,
             to: today
         ).day ?? 0
-            
         return max(0, min(days, totalLeaseDays))
     }
         
@@ -100,6 +95,27 @@ final class DashboardViewModel: ObservableObject {
     var currentMilesPerDay: Double {
         guard daysElapsed > 0 else { return 0 }
         return Double(lease.currentMileage) / Double(daysElapsed)
+    }
+    
+    // MARK: - Monthly Pace
+
+    /// The average number of miles allowed per month based on annual allowance.
+    var allowedMilesPerMonth: Double {
+        Double(lease.milesAllowedPerYear) / 12.0
+    }
+
+    /// Fractional months elapsed since lease start.
+    /// Uses days to create a smoother monthly pace calculation.
+    var monthsElapsedFractional: Double {
+        let days = daysElapsed
+        let averageDaysPerMonth = 30.44
+        return Double(days) / averageDaysPerMonth
+    }
+
+    /// The user's current average miles driven per month.
+    var currentMilesPerMonth: Double {
+        guard monthsElapsedFractional > 0 else { return 0 }
+        return Double(lease.currentMileage) / monthsElapsedFractional
     }
         
     // MARK: - Current Lease Position
