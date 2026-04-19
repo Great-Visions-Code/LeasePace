@@ -12,27 +12,28 @@ struct DashboardView: View {
     let lease: Lease
     
     private var dashboardVM: DashboardViewModel {
-        DashboardViewModel(vehicle: vehicle, lease: lease)
+        DashboardViewModel(
+            vehicle: vehicle,
+            lease: lease)
     }
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                
                 // Header
                 VStack(spacing: 8) {
                     Text(vehicle.displayName)
-                        .font(.title2)
-                        .bold()
+                        .font(.headline)
                     
                     Text(dashboardVM.paceStatusText)
-                        .font(.headline)
+                        .font(.title2)
+                        .bold()
                 }
                 
                 // End of Lease Forecast
                 DashboardCardView(title: "End of Lease Forecast") {
                     VStack(spacing: 8) {
-                        Text("Total Miles Allowed: \(dashboardVM.totalMilesAllowed)")
+                        Text("Total Allowed: \(dashboardVM.totalMilesAllowed)")
                         
                         Divider()
                         
@@ -51,6 +52,7 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
+                // Daily Average Pace
                 DashboardCardView(title: "Daily Mileage Pace") {
                     VStack(spacing: 8) {
                         Text("Allowed: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal)")
@@ -63,6 +65,7 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
+                // Monthly Average Pace
                 DashboardCardView(title: "Monthly Mileage Pace") {
                     VStack(spacing: 8) {
                         Text("Allowed: \(dashboardVM.allowedMilesPerMonth.formattedTwoDecimal)")
@@ -75,17 +78,18 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
+                // Mileage to Date
                 DashboardCardView(title: "Mileage to Date") {
                     VStack(spacing: 8) {
                         Text("\(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) miles \(dashboardVM.differenceInMilesAllowedToDate >= 0 ? "Under Pace to date" : "Over Pace to date"  )")
                         
                         Divider()
                         
-                        Text("\(dashboardVM.expectedMileageByToday.formattedWholeNumber) allowed to date")
+                        Text("Allowed to Date: \(dashboardVM.expectedMileageByToday.formattedWholeNumber)")
 
                         Divider()
                         
-                        Text("\(lease.currentMileage.formattedWithCommas) current mileage")
+                        Text("Current: \(lease.currentMileage.formattedWithCommas)")
                     }
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
@@ -94,23 +98,23 @@ struct DashboardView: View {
                 // Lease Progress Timeline
                 DashboardCardView(title: "Lease Progress") {
                     VStack(spacing: 8) {
-                        Text("\(dashboardVM.leaseProgressPercentage)% Complete")
+                        Text("Progress: \(dashboardVM.leaseProgressPercentage)%")
                         
                         Divider()
                         
-                        Text("\(dashboardVM.daysElapsed) days elapsed")
+                        Text("Days since Start: \(dashboardVM.daysElapsed)")
                         
                         Divider()
                         
-                        Text("\(dashboardVM.daysRemaining) days remaining")
+                        Text("Remaining Days: \(dashboardVM.daysRemaining)")
                         
                         Divider()
                         
-                        Text("Starts \(lease.startDate.formattedDateShortString)")
+                        Text("Start: \(lease.startDate.formattedDateShortString)")
                         
                         Divider()
                         
-                        Text("Ends \(dashboardVM.leaseEndDate.formattedDateShortString)")
+                        Text("End: \(dashboardVM.leaseEndDate.formattedDateShortString)")
                     }
                     .foregroundStyle(.secondary)
                 }
@@ -123,25 +127,26 @@ struct DashboardView: View {
 }
 
 #Preview {
-    
-    DashboardView(
-        vehicle: Vehicle(
-            year: 2026,
-            make: "Mercedes",
-            model: "C300"
-        ),
-        
-        lease: Lease(
-            startDate: Calendar.current.date(
-                from: DateComponents(
-                    year: 2026,
-                    month: 2,
-                    day: 24
-    )
-            )!,
-            termMonths: 48,
-            milesAllowedPerYear: 12000,
-            costPerMile: 0.25,
-            currentMileage: 2436)
-    )
+    NavigationStack {
+        DashboardView(
+            vehicle: Vehicle(
+                year: 2026,
+                make: "Mercedes",
+                model: "C300"
+            ),
+            lease: Lease(
+                startDate: Calendar.current.date(
+                    from: DateComponents(
+                        year: 2026,
+                        month: 2,
+                        day: 24
+                    )
+                )!,
+                termMonths: 48,
+                milesAllowedPerYear: 12000,
+                costPerMile: 0.25,
+                currentMileage: 2914
+            )
+        )
+    }
 }
