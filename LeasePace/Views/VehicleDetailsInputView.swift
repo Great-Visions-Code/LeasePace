@@ -13,6 +13,24 @@ struct VehicleDetailsInputView: View {
     @State private var make = ""
     @State private var model = ""
     @State private var nickname = ""
+    
+    // MARK: - Validation
+    
+    private var isFormValid: Bool {
+        let currentYear = Calendar.current.component(.year, from: Date())
+
+        guard
+            let yearInt = Int(year),
+            yearInt >= 1980,
+            yearInt <= currentYear + 1,
+            
+            !make.trimmingCharacters(in: .whitespaces).isEmpty,
+            !model.trimmingCharacters(in: .whitespaces).isEmpty
+        else {
+            return false
+        }
+        return true
+    }
         
     var body: some View {
         ScrollView {
@@ -29,7 +47,7 @@ struct VehicleDetailsInputView: View {
                     Text("Year")
                         .bold()
                         
-                    TextField("2026", text: $year)
+                    TextField("Example: 2026", text: $year)
                         .keyboardType(.numberPad)
                         .textFieldStyle(.roundedBorder)
                 }
@@ -39,7 +57,7 @@ struct VehicleDetailsInputView: View {
                     Text("Make")
                         .bold()
                     
-                    TextField("Land Rover", text: $make)
+                    TextField("Example: Land Rover", text: $make)
                         .textFieldStyle(.roundedBorder)
                 }
                     
@@ -48,7 +66,7 @@ struct VehicleDetailsInputView: View {
                     Text("Model")
                         .bold()
                         
-                    TextField("Range Rover", text: $model)
+                    TextField("Example: Range Rover", text: $model)
                         .textFieldStyle(.roundedBorder)
                 }
                     
@@ -57,7 +75,7 @@ struct VehicleDetailsInputView: View {
                     Text("Nickname (Optional)")
                         .bold()
                         
-                    TextField("Daily Driver", text: $nickname)
+                    TextField("Example: Daily Driver", text: $nickname)
                         .textFieldStyle(.roundedBorder)
                 }
                     
@@ -68,7 +86,9 @@ struct VehicleDetailsInputView: View {
                             year: Int(year) ?? 0,
                             make: make,
                             model: model,
-                            nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : nickname
+                            nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            ? nil
+                            : nickname
                         )
                     )
                 } label: {
@@ -79,9 +99,10 @@ struct VehicleDetailsInputView: View {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(.blue)
+                                .fill(isFormValid ? .blue : .gray)
                         )
                 }
+                .disabled(!isFormValid)
                 .padding(.top, 12)
             }
             .padding()
