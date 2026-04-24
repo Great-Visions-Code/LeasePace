@@ -18,9 +18,33 @@ struct LeaseDetailsInputView: View {
     @State private var costPerMile = ""
     @State private var currentMileage = ""
     
+    // MARK: - Validation
+        
+    private var isFormValid: Bool {
+            
+        guard
+            let milesAllowedPerYearInt = Int(milesAllowedPerYear),
+            milesAllowedPerYearInt > 999,
+            milesAllowedPerYearInt <= 30000,
+            
+            let costPerMile = Double(costPerMile),
+            costPerMile >= 0,
+            costPerMile <= 1.00,
+            
+            let currentMileage = Int(currentMileage),
+            currentMileage >= 0,
+            currentMileage <= 999999
+            
+        else {
+            return false
+        }
+        return true
+    }
+    
     // MARK: - Body
     
     var body: some View {
+        
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                     
@@ -115,9 +139,10 @@ struct LeaseDetailsInputView: View {
                         .foregroundColor(.white)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(.blue)
+                                .fill(isFormValid ? .blue : .gray)
                         )
                 }
+                .disabled(!isFormValid)
                 .padding(.top, 12)
             }
             .padding()
@@ -126,8 +151,6 @@ struct LeaseDetailsInputView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-// MARK: - Preview
 
 #Preview {
     NavigationStack {
