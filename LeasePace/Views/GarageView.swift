@@ -2,13 +2,12 @@
 //  GarageView.swift
 //  LeasePace
 //
-// Created by Great-Visions-Code on 4/1/26
+//  Created by Great-Visions-Code on 4/1/26
 //
 
 import SwiftUI
 
 struct GarageView: View {
-    
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -32,7 +31,6 @@ struct GarageView: View {
                                 .fill(.blue)
                         )
                 }
-                
                 Spacer()
             }
             .padding()
