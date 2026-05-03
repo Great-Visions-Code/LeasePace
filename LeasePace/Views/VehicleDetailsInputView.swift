@@ -94,7 +94,7 @@ struct VehicleDetailsInputView: View {
                 } label: {
                     Text("Continue")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
