@@ -31,6 +31,7 @@ struct DashboardView: View {
                     Text(dashboardVM.paceStatusText)
                         .font(.title2)
                         .bold()
+                        .foregroundStyle(dashboardVM.paceStatusColor)
                 }
                 
                 // Mileage to Date
@@ -126,6 +127,23 @@ struct DashboardView: View {
                         Text("End: \(dashboardVM.leaseEndDate.formattedDateShortString)")
                     }
                     .foregroundStyle(.secondary)
+                }
+                
+                NavigationLink {
+                    UpdateMileageView(
+                        vehicle: vehicle,
+                        lease: lease
+                    )
+                } label: {
+                    Text("Update Mileage")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundStyle(.white)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(.blue)
+                        )
                 }
             }
             .padding()
