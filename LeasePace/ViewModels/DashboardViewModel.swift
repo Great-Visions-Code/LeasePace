@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 /// Transforms raw `Vehicle` and `Lease` data into calculated values
 /// for the dashboard screen.
@@ -181,6 +182,15 @@ final class DashboardViewModel: ObservableObject {
             return "You're Over Pace"
         } else {
             return "You're On Pace"
+        }
+    }
+    
+    /// Visual Display of pace status.
+    var paceStatusColor: Color {
+        if projectedOverageMiles > 0 {
+            return .red
+        } else {
+            return .green
         }
     }
         
