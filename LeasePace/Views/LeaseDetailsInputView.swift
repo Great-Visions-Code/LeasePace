@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LeaseDetailsInputView: View {
+    
     // MARK: - Properties
         
     let vehicle: Vehicle
@@ -17,11 +18,11 @@ struct LeaseDetailsInputView: View {
     @State private var milesAllowedPerYear = ""
     @State private var costPerMile = ""
     @State private var currentMileage = ""
+    @State private var navigateToDashboard = false
     
     // MARK: - Validation
         
     private var isFormValid: Bool {
-            
         guard
             let milesAllowedPerYearInt = Int(milesAllowedPerYear),
             milesAllowedPerYearInt > 999,
@@ -39,6 +40,16 @@ struct LeaseDetailsInputView: View {
             return false
         }
         return true
+    }
+    
+    private var newLease: Lease {
+        Lease(
+            startDate: startDate,
+            termMonths: termMonths,
+            milesAllowedPerYear: Int(milesAllowedPerYear) ?? 0,
+            costPerMile: Double(costPerMile) ?? 0,
+            currentMileage: Int(currentMileage) ?? 0
+        )
     }
     
     // MARK: - Body
@@ -120,30 +131,38 @@ struct LeaseDetailsInputView: View {
                 
                 // MARK: - Continue Navigation
                 
-                NavigationLink {
-                    DashboardView(
+                Button {
+                    print("Continue tapped!")
+                    
+                    LeaseStorage.save(
                         vehicle: vehicle,
-                        lease: Lease(
-                            startDate: startDate,
-                            termMonths: termMonths,
-                            milesAllowedPerYear: Int(milesAllowedPerYear) ?? 0,
-                            costPerMile: Double(costPerMile) ?? 0,
-                            currentMileage: Int(currentMileage) ?? 0
-                        )
+                        lease: newLease
                     )
+                    print("Saved vehicle:", vehicle.displayName)
+                    print("Saved lease:", newLease)
+                    
+                    navigateToDashboard = true
                 } label: {
                     Text("Continue")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(isFormValid ? .blue : .gray)
+                                .fill(isFormValid
+                                      ? .blue
+                                      : .gray)
                         )
                 }
                 .disabled(!isFormValid)
                 .padding(.top, 12)
+                .navigationDestination(isPresented: $navigateToDashboard) {
+                    DashboardView(
+                        vehicle: vehicle,
+                        lease: newLease
+                    )
+                }
             }
             .padding()
         }
