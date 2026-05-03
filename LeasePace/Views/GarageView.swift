@@ -8,34 +8,66 @@
 import SwiftUI
 
 struct GarageView: View {
+        
+    // MARK: - Saved Data
+    
+    @State private var savedLease: Lease?
+    @State private var savedVehicle: Vehicle?
+    
+    // MARK: - Body
+    
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                
-                // MARK: - Empty State Message
-                Text("Add your vehicle to start tracking your lease mileage.")
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                
-                // MARK: - Add Vehicle Navigation
-                NavigationLink {
-                    VehicleDetailsInputView()
-                } label: {
-                    Text("Add Vehicle")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.blue)
-                        )
+            Group {
+                if let vehicle = savedVehicle,
+                   let lease = savedLease {
+                        
+                    // MARK: - Saved Lease Dashboard
+                        
+                    DashboardView(
+                        vehicle: vehicle,
+                        lease: lease
+                    )
+                } else {
+                        
+                    // MARK: - Empty State
+                        
+                    VStack(spacing: 20) {
+                    
+                        Text("Add your vehicle to start tracking your lease mileage.")
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            
+                        NavigationLink {
+                            VehicleDetailsInputView()
+                            
+                        } label: {
+                            Text("Add Vehicle")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(.blue)
+                                )
+                        }
+                        Spacer()
+                    }
+                    .padding()
                 }
-                Spacer()
             }
-            .padding()
             .navigationTitle("Garage")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                print("Garage appeared")
+                
+                savedVehicle = LeaseStorage.loadVehicle()
+                savedLease = LeaseStorage.loadLease()
+                
+                print("Loaded vehicle:", savedVehicle?.displayName ?? "nil")
+                print("Loaded lease:", savedLease as Any)
+            }
         }
     }
 }
