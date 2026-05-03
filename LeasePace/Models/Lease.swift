@@ -8,7 +8,8 @@
 import Foundation
 /// Stores the user-entered lease details needed for mileage pacing
 /// and end-of-lease overage forecasting.
-struct Lease {
+struct Lease: Codable {
+    
     /// The date the lease began.
     var startDate: Date
     
