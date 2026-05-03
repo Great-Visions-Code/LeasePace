@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Vehicle {
+struct Vehicle: Codable {
+    
     var year: Int
     var make: String
     var model: String
@@ -18,12 +19,11 @@ struct Vehicle {
     // Displays Nickname or returns year, make, model as default
     // Handles empty Nickname case
     var displayName: String {
-        if let nickname = nickname?
-            .trimmingCharacters(in: .whitespacesAndNewlines),
-           !nickname.isEmpty {
-            return nickname
-        } else {
-            return "\(year) \(make) \(model)"
+        if let nickname = nickname?.trimmingCharacters(in: .whitespacesAndNewlines),
+            !nickname.isEmpty {
+                return nickname
+            } else {
+                return "\(year) \(make) \(model)"
         }
     }
 }
