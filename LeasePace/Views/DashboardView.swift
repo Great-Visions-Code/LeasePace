@@ -10,6 +10,16 @@ import SwiftUI
 struct DashboardView: View {
     let vehicle: Vehicle
     let lease: Lease
+    let onDelete: (() -> Void)?
+    
+    init(vehicle: Vehicle,
+         lease: Lease,
+         onDelete: (() -> Void)? = nil
+    ) {
+        self.vehicle = vehicle
+        self.lease = lease
+        self.onDelete = onDelete
+    }
     
     private var dashboardVM: DashboardViewModel {
         DashboardViewModel(
@@ -150,6 +160,20 @@ struct DashboardView: View {
         }
         .navigationTitle("Dashboard")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Delete Vehicle",
+                       role: .destructive
+                ) {
+                    print("Delete tapped. onDelete exists:",
+                          onDelete != nil
+                    )
+                    
+                    LeaseStorage.clear()
+                    onDelete?()
+                }
+            }
+        }
     }
 }
 
