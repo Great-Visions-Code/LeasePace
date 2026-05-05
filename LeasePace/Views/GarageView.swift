@@ -26,7 +26,11 @@ struct GarageView: View {
                         
                     DashboardView(
                         vehicle: vehicle,
-                        lease: lease
+                        lease: lease,
+                        onDelete: {
+                            savedVehicle = nil
+                            savedLease = nil
+                        }
                     )
                 } else {
                         
