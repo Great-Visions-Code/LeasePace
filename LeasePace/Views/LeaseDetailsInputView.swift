@@ -160,7 +160,10 @@ struct LeaseDetailsInputView: View {
                 .navigationDestination(isPresented: $navigateToDashboard) {
                     DashboardView(
                         vehicle: vehicle,
-                        lease: newLease
+                        lease: newLease,
+                        onDelete: {
+                            navigateToDashboard = false
+                        }
                     )
                 }
             }
