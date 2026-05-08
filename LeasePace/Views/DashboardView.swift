@@ -10,21 +10,33 @@ import SwiftUI
 struct DashboardView: View {
     let vehicle: Vehicle
     let lease: Lease
+    let garageVM: GarageViewModel?
     let onDelete: (() -> Void)?
     
-    init(vehicle: Vehicle,
-         lease: Lease,
-         onDelete: (() -> Void)? = nil
+    init(
+        vehicle: Vehicle,
+        lease: Lease,
+        garageVM: GarageViewModel? = nil,
+        onDelete: (() -> Void)? = nil
     ) {
         self.vehicle = vehicle
         self.lease = lease
+        self.garageVM = garageVM
         self.onDelete = onDelete
+    }
+    
+    private var activeLease: Lease {
+        garageVM?.savedLease ?? lease
+    }
+    
+    private var activeVehicle: Vehicle {
+        garageVM?.savedVehicle ?? vehicle
     }
     
     private var dashboardVM: DashboardViewModel {
         DashboardViewModel(
-            vehicle: vehicle,
-            lease: lease
+            vehicle: activeVehicle,
+            lease: activeLease
         )
     }
     
@@ -33,9 +45,9 @@ struct DashboardView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                // Header
+                    // Header
                 VStack(spacing: 8) {
-                    Text(vehicle.displayName)
+                    Text(activeVehicle.displayName)
                         .font(.headline)
                     
                     Text(dashboardVM.paceStatusText)
@@ -44,27 +56,27 @@ struct DashboardView: View {
                         .foregroundStyle(dashboardVM.paceStatusColor)
                 }
                 
-                // Mileage to Date
+                    // Mileage to Date
                 DashboardCardView(title: "Mileage to Date") {
                     VStack(spacing: 8) {
                         Text("\(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) miles")
                             .bold()
                             .foregroundStyle(.primary)
                         Text("\(dashboardVM.differenceInMilesAllowedToDate >= 0 ? "Under pace to date" : "Over pace to date")")
-                            
+                        
                         Divider()
-                            
+                        
                         Text("Allowed: \(dashboardVM.expectedMileageByToday.formattedWholeNumber) mi")
-
+                        
                         Divider()
-                            
-                        Text("Current: \(lease.currentMileage.formattedWithCommas) mi")
+                        
+                        Text("Current: \(activeLease.currentMileage.formattedWithCommas) mi")
                     }
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
                 }
                 
-                // End of Lease Forecast
+                    // End of Lease Forecast
                 DashboardCardView(title: "End of Lease Forecast") {
                     VStack(spacing: 8) {
                         Text("Total Allowed: \(dashboardVM.totalMilesAllowed.formattedWithCommas) mi")
@@ -74,19 +86,19 @@ struct DashboardView: View {
                         Text("Projected End Miles: \(dashboardVM.projectedMilesAtEndOfLease.formattedWholeNumber) mi")
                         
                         Divider()
-
+                        
                         Text("Projected Overage Cost: \(dashboardVM.projectedOverageCost.formattedCurrency)")
                             .bold()
                         
                         Divider()
-
+                        
                         Text(dashboardVM.projectedMileageSummaryText)
                             .bold()
                     }
                     .frame(maxWidth: .infinity)
                 }
                 
-                // Daily Mileage Pace
+                    // Daily Mileage Pace
                 DashboardCardView(title: "Daily Mileage Pace") {
                     VStack(spacing: 8) {
                         Text("Allowed: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal) mi/day")
@@ -99,7 +111,7 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
-                // Monthly Mileage Pace
+                    // Monthly Mileage Pace
                 DashboardCardView(title: "Monthly Mileage Pace") {
                     VStack(spacing: 8) {
                         Text("Allowed: \(dashboardVM.allowedMilesPerMonth.formattedTwoDecimal) mi/month")
@@ -112,7 +124,7 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
-                // Lease Progress Timeline
+                    // Lease Progress Timeline
                 DashboardCardView(title: "Lease Progress") {
                     VStack(spacing: 8) {
                         Text("\(dashboardVM.leaseProgressPercentage)% Complete")
@@ -130,7 +142,7 @@ struct DashboardView: View {
                         
                         Divider()
                         
-                        Text("Start: \(lease.startDate.formattedDateShortString)")
+                        Text("Start: \(activeLease.startDate.formattedDateShortString)")
                         
                         Divider()
                         
@@ -139,21 +151,24 @@ struct DashboardView: View {
                     .foregroundStyle(.secondary)
                 }
                 
-                NavigationLink {
-                    UpdateMileageView(
-                        vehicle: vehicle,
-                        lease: lease
-                    )
-                } label: {
-                    Text("Update Mileage")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundStyle(.white)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.blue)
+                if let garageVM {
+                    NavigationLink {
+                        UpdateMileageView(
+                            vehicle: activeVehicle,
+                            lease: activeLease,
+                            garageVM: garageVM
                         )
+                    } label: {
+                        Text("Update Mileage")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(.blue)
+                            )
+                    }
                 }
             }
             .padding()
@@ -165,11 +180,7 @@ struct DashboardView: View {
                 Button("Delete Vehicle",
                        role: .destructive
                 ) {
-                    print("Delete tapped. onDelete exists:",
-                          onDelete != nil
-                    )
-                    
-                    LeaseStorage.clear()
+                    garageVM?.deleteSavedData()
                     onDelete?()
                 }
             }
@@ -197,7 +208,8 @@ struct DashboardView: View {
                 milesAllowedPerYear: 12000,
                 costPerMile: 0.25,
                 currentMileage: 2914
-            )
+            ),
+            garageVM: GarageViewModel()
         )
     }
 }
