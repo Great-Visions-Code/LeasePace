@@ -11,17 +11,21 @@ struct UpdateMileageView: View {
     
     let vehicle: Vehicle
     let lease: Lease
+    let garageVM: GarageViewModel
     
     @State private var updatedMileage = ""
-    @State private var navigationToDashboard = false
+
+    @Environment(\.dismiss) private var dismiss
     
     init(
         vehicle: Vehicle,
-        lease: Lease
+        lease: Lease,
+        garageVM: GarageViewModel
     ) {
         self.vehicle = vehicle
         self.lease = lease
         _updatedMileage = State(initialValue: "\(lease.currentMileage)")
+        self.garageVM = garageVM
     }
      
     // MARK: - Updated Lease
@@ -65,7 +69,7 @@ struct UpdateMileageView: View {
                         .foregroundStyle(.secondary)
                 }
                 
-                // MARK: Mileage Input
+                // MARK: - Mileage Input
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Updated Mileage")
@@ -79,12 +83,12 @@ struct UpdateMileageView: View {
                 // MARK: - Save Button
                 
                 Button {
-                    LeaseStorage.save(
+                    garageVM.save(
                         vehicle: vehicle,
                         lease: updatedLease
                     )
-                    
-                    navigationToDashboard = true
+
+                    dismiss()
                 } label: {
                     Text("Save Mileage")
                         .font(.headline)
@@ -106,12 +110,7 @@ struct UpdateMileageView: View {
         }
         .navigationTitle("Update Mileage")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(isPresented: $navigationToDashboard) {
-            DashboardView(
-                vehicle: vehicle,
-                lease: updatedLease
-            )
-        }
+
     }
 }
 
@@ -126,17 +125,18 @@ struct UpdateMileageView: View {
             lease: Lease(
                 startDate: Calendar.current.date(
                     from: DateComponents(
-                        year: 2026,
-                        month: 2,
-                        day: 24
-                    )
+                            year: 2026,
+                            month: 2,
+                            day: 24
+                        )
                     )!,
-                    termMonths: 48,
-                    milesAllowedPerYear: 12000,
-                    costPerMile: 0.25,
-                    currentMileage: 3250
-                )
-            )
+                termMonths: 48,
+                milesAllowedPerYear: 12000,
+                costPerMile: 0.25,
+                currentMileage: 3250
+            ),
+        garageVM: GarageViewModel()
+        )
     }
 }
 
