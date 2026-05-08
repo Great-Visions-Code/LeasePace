@@ -9,28 +9,25 @@ import SwiftUI
 
 struct GarageView: View {
         
-    // MARK: - Saved Data
+    // MARK: - ViewModel
     
-    @State private var savedLease: Lease?
-    @State private var savedVehicle: Vehicle?
+    @StateObject private var garageVM = GarageViewModel()
     
     // MARK: - Body
     
     var body: some View {
         NavigationStack {
             Group {
-                if let vehicle = savedVehicle,
-                   let lease = savedLease {
+                if let vehicle = garageVM.savedVehicle,
+                   let lease = garageVM.savedLease {
                         
                     // MARK: - Saved Lease Dashboard
                         
                     DashboardView(
                         vehicle: vehicle,
                         lease: lease,
-                        onDelete: {
-                            savedVehicle = nil
-                            savedLease = nil
-                        }
+                        garageVM: garageVM,
+                        onDelete: garageVM.deleteSavedData
                     )
                 } else {
                         
@@ -43,7 +40,7 @@ struct GarageView: View {
                             .multilineTextAlignment(.center)
                             
                         NavigationLink {
-                            VehicleDetailsInputView()
+                            VehicleDetailsInputView(garageVM: garageVM)
                             
                         } label: {
                             Text("Add Vehicle")
@@ -56,6 +53,7 @@ struct GarageView: View {
                                         .fill(.blue)
                                 )
                         }
+                        
                         Spacer()
                     }
                     .padding()
@@ -64,13 +62,7 @@ struct GarageView: View {
             .navigationTitle("Garage")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                print("Garage appeared")
-                
-                savedVehicle = LeaseStorage.loadVehicle()
-                savedLease = LeaseStorage.loadLease()
-                
-                print("Loaded vehicle:", savedVehicle?.displayName ?? "nil")
-                print("Loaded lease:", savedLease as Any)
+                garageVM.loadSavedData()
             }
         }
     }
