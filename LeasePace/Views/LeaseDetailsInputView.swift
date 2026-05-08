@@ -12,6 +12,7 @@ struct LeaseDetailsInputView: View {
     // MARK: - Properties
         
     let vehicle: Vehicle
+    let garageVM: GarageViewModel
         
     @State private var startDate = Date()
     @State private var termMonths = 36
@@ -129,17 +130,10 @@ struct LeaseDetailsInputView: View {
                         .textFieldStyle(.roundedBorder)
                 }
                 
-                // MARK: - Continue Navigation
+                // MARK: - Continue Button
                 
                 Button {
-                    print("Continue tapped!")
-                    
-                    LeaseStorage.save(
-                        vehicle: vehicle,
-                        lease: newLease
-                    )
-                    print("Saved vehicle:", vehicle.displayName)
-                    print("Saved lease:", newLease)
+                    garageVM.save(vehicle: vehicle, lease: newLease)
                     
                     navigateToDashboard = true
                 } label: {
@@ -152,7 +146,8 @@ struct LeaseDetailsInputView: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .fill(isFormValid
                                       ? .blue
-                                      : .gray)
+                                      : .gray
+                                     )
                         )
                 }
                 .disabled(!isFormValid)
@@ -161,7 +156,9 @@ struct LeaseDetailsInputView: View {
                     DashboardView(
                         vehicle: vehicle,
                         lease: newLease,
+                        garageVM: garageVM,
                         onDelete: {
+                            garageVM.deleteSavedData()
                             navigateToDashboard = false
                         }
                     )
@@ -181,7 +178,8 @@ struct LeaseDetailsInputView: View {
                 year: 2026,
                 make: "Mercedes",
                 model: "C300"
-            )
+            ),
+            garageVM: GarageViewModel()
         )
     }
 }
