@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct VehicleDetailsInputView: View {
+    
+    let garageVM: GarageViewModel
         
     @State private var year = ""
     @State private var make = ""
     @State private var model = ""
     @State private var nickname = ""
+    
+    private var newVehicle: Vehicle {
+        Vehicle(
+            year: Int(year) ?? 0,
+            make: make,
+            model: model,
+            nickname: nickname.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            ).isEmpty ? nil : nickname
+        )
+    }
     
     // MARK: - Validation
     
@@ -79,17 +92,11 @@ struct VehicleDetailsInputView: View {
                         .textFieldStyle(.roundedBorder)
                 }
                     
-                // MARK: - Continue Navigation
+                // MARK: - Continue Button
                 NavigationLink {
                     LeaseDetailsInputView(
-                        vehicle: Vehicle(
-                            year: Int(year) ?? 0,
-                            make: make,
-                            model: model,
-                            nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            ? nil
-                            : nickname
-                        )
+                        vehicle: newVehicle,
+                        garageVM: garageVM
                     )
                 } label: {
                     Text("Continue")
@@ -114,6 +121,6 @@ struct VehicleDetailsInputView: View {
 
 #Preview {
     NavigationStack {
-        VehicleDetailsInputView()
+        VehicleDetailsInputView(garageVM: GarageViewModel())
     }
 }
