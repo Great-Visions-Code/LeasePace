@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct DashboardView: View {
+    
+    @State private var showDeleteConfirmation = false
+    
     let vehicle: Vehicle
     let lease: Lease
     let garageVM: GarageViewModel?
@@ -177,13 +180,20 @@ struct DashboardView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Delete Vehicle",
-                       role: .destructive
-                ) {
-                    garageVM?.deleteSavedData()
-                    onDelete?()
+                Button("Delete Vehicle", role: .destructive) {
+                    showDeleteConfirmation = true
                 }
             }
+        }
+        .alert("Delete Vehicle?", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) {}
+            
+            Button("Delete", role: .destructive) {
+                garageVM?.deleteSavedData()
+                onDelete?()
+            }
+        } message: {
+            Text("This will remove the vehicle and lease details from LeasePace. You can add them again anytime.")
         }
     }
 }

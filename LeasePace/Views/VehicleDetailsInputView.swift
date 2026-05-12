@@ -16,6 +16,8 @@ struct VehicleDetailsInputView: View {
     @State private var model = ""
     @State private var nickname = ""
     
+    // MARK: - Vehicle Builder
+    
     private var newVehicle: Vehicle {
         Vehicle(
             year: Int(year) ?? 0,
