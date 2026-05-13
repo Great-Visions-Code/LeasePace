@@ -132,29 +132,53 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                 }
                 
-                    // Daily Mileage Pace
+                // MARK: - Daily Mileage Pace
+                
                 DashboardCardView(title: "Daily Mileage Pace") {
-                    VStack(spacing: 8) {
-                        Text("Allowed: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal) mi/day")
+                    VStack(spacing: 10) {
+                        
+                        Text("\(dashboardVM.currentMilesPerDay.formattedTwoDecimal) mi/day")
+                            .font(.title3)
+                            .bold()
+                            .foregroundStyle(
+                                dashboardVM.currentMilesPerDay > dashboardVM.allowedMilesPerDay
+                                ? .red
+                                : .green
+                            )
+                        
+                        Text("Current pace")
+                            .foregroundStyle(.secondary)
                         
                         Divider()
                         
-                        Text("Current: \(dashboardVM.currentMilesPerDay.formattedTwoDecimal) mi/day")
+                        Text("Allowed Daily Pace: \(dashboardVM.allowedMilesPerDay.formattedTwoDecimal) mi/day")
+                            .foregroundStyle(.secondary)
                     }
-                    .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
                 }
                 
-                    // Monthly Mileage Pace
+                // MARK: - Monthly Mileage Pace
+                
                 DashboardCardView(title: "Monthly Mileage Pace") {
-                    VStack(spacing: 8) {
-                        Text("Allowed: \(dashboardVM.allowedMilesPerMonth.formattedTwoDecimal) mi/month")
+                    VStack(spacing: 10) {
+                        
+                        Text("\(dashboardVM.currentMilesPerMonth.formattedTwoDecimal) mi/month")
+                            .font(.title3)
+                            .bold()
+                            .foregroundStyle(
+                                dashboardVM.currentMilesPerMonth > dashboardVM.allowedMilesPerMonth
+                                ? .red
+                                : .green
+                            )
+                        
+                        Text("Current pace")
+                            .foregroundStyle(.secondary)
                         
                         Divider()
                         
-                        Text("Current: \(dashboardVM.currentMilesPerMonth.formattedTwoDecimal) mi/month")
+                        Text("Allowed Monthly Pace: \(dashboardVM.allowedMilesPerMonth.formattedTwoDecimal) mi/month")
+                            .foregroundStyle(.secondary)
                     }
-                    .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
                 }
                 
