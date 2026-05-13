@@ -48,7 +48,8 @@ struct DashboardView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                    // Header
+                // MARK: - Header
+                
                 VStack(spacing: 8) {
                     Text(activeVehicle.displayName)
                         .font(.headline)
@@ -59,44 +60,74 @@ struct DashboardView: View {
                         .foregroundStyle(dashboardVM.paceStatusColor)
                 }
                 
-                    // Mileage to Date
+                // MARK: - Mileage to Date
+                
                 DashboardCardView(title: "Mileage to Date") {
-                    VStack(spacing: 8) {
-                        Text("\(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) miles")
+                    VStack(spacing: 10) {
+                        Text("\(abs(dashboardVM.differenceInMilesAllowedToDate).formattedWholeNumber) mi")
+                            .font(.title2)
                             .bold()
                             .foregroundStyle(.primary)
-                        Text("\(dashboardVM.differenceInMilesAllowedToDate >= 0 ? "Under pace to date" : "Over pace to date")")
+                        
+                        Text(
+                            dashboardVM.differenceInMilesAllowedToDate >= 0
+                             ? "Under pace to date"
+                             : "Over pace to date"
+                        )
+                            .foregroundStyle(
+                                dashboardVM.differenceInMilesAllowedToDate >= 0
+                                ? .green
+                                : .red
+                            )
                         
                         Divider()
                         
-                        Text("Allowed: \(dashboardVM.expectedMileageByToday.formattedWholeNumber) mi")
-                        
-                        Divider()
-                        
-                        Text("Current: \(activeLease.currentMileage.formattedWithCommas) mi")
+                        VStack(spacing: 6) {
+                            Text("Allowed: \(dashboardVM.expectedMileageByToday.formattedWholeNumber) mi")
+                            Text("Current: \(activeLease.currentMileage.formattedWithCommas) mi")
+                        }
+                        .foregroundStyle(.secondary)
                     }
-                    .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
                 }
-                
-                    // End of Lease Forecast
+
+                // MARK: - End of Lease Forecast
                 DashboardCardView(title: "End of Lease Forecast") {
-                    VStack(spacing: 8) {
-                        Text("Total Allowed: \(dashboardVM.totalMilesAllowed.formattedWithCommas) mi")
-                        
-                        Divider()
-                        
-                        Text("Projected End Miles: \(dashboardVM.projectedMilesAtEndOfLease.formattedWholeNumber) mi")
-                        
-                        Divider()
-                        
-                        Text("Projected Overage Cost: \(dashboardVM.projectedOverageCost.formattedCurrency)")
+                    VStack(spacing: 10) {
+                        Text(dashboardVM.projectedOverageCost > 0
+                             ? dashboardVM.projectedOverageCost.formattedCurrency
+                             : "On Track"
+                        )
+                            .font(.title2)
                             .bold()
+                            .foregroundStyle(
+                                dashboardVM.projectedOverageCost > 0
+                                ? .red
+                                : .green
+                            )
+                        
+                        Text(
+                            dashboardVM.projectedOverageCost > 0
+                            ? "Projected overage cost"
+                            : "Projected to stay within lease allowance"
+                        )
+                        .foregroundStyle(.secondary)
+                        
+                        Divider()
+                        
+                        VStack(spacing: 6) {
+                            Text("Projected End Mileage: \(dashboardVM.projectedMilesAtEndOfLease.formattedWholeNumber) mi")
+                            Text("Lease Allowance: \(dashboardVM.totalMilesAllowed.formattedWithCommas) mi")
+                            Text("Overage Rate: \(activeLease.costPerMile.formattedCurrency)/mi")
+                        }
+                        .foregroundStyle(.secondary)
                         
                         Divider()
                         
                         Text(dashboardVM.projectedMileageSummaryText)
-                            .bold()
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                            .multilineTextAlignment(.center)
                     }
                     .frame(maxWidth: .infinity)
                 }
