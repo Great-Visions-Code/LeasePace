@@ -101,15 +101,11 @@ struct VehicleDetailsInputView: View {
                         garageVM: garageVM
                     )
                 } label: {
-                    Text("Continue")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(isFormValid ? .blue : .gray)
-                        )
+                    PrimaryButtonView(
+                        title: "Continue",
+                        backgroundColor:
+                            isFormValid ? .blue : .gray
+                   )
                 }
                 .disabled(!isFormValid)
                 .padding(.top, 12)

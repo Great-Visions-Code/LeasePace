@@ -137,18 +137,11 @@ struct LeaseDetailsInputView: View {
                     
                     navigateToDashboard = true
                 } label: {
-                    Text("Continue")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundStyle(.white)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(isFormValid
-                                      ? .blue
-                                      : .gray
-                                     )
-                        )
+                    PrimaryButtonView(
+                        title: "Continue",
+                        backgroundColor:
+                            isFormValid ? .blue : .gray
+                    )
                 }
                 .disabled(!isFormValid)
                 .padding(.top, 12)

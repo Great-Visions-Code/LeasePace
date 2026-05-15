@@ -90,18 +90,11 @@ struct UpdateMileageView: View {
 
                     dismiss()
                 } label: {
-                    Text("Save Mileage")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundStyle(.white)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(isFormValid
-                                      ? .blue
-                                      : .gray
-                                )
-                        )
+                    PrimaryButtonView(
+                        title: "Save Mileage",
+                        backgroundColor:
+                            isFormValid ? .blue : .gray
+                    )
                 }
                 .disabled(!isFormValid)
                 .padding(.top, 12)

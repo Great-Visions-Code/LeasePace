@@ -43,15 +43,7 @@ struct GarageView: View {
                             VehicleDetailsInputView(garageVM: garageVM)
                             
                         } label: {
-                            Text("Add Vehicle")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(.blue)
-                                )
+                            PrimaryButtonView(title: "Add Vehicle")
                         }
                         
                         Spacer()
